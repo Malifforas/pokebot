@@ -7,15 +7,9 @@ def load_rom(emulator: Emulator, rom_path: str) -> None:
     emulator.load_rom(rom)
 
 def reset_emulator(emulator: Emulator) -> None:
-    emulator.press_button("POWER")
-    emulator.press_button("A")
-    emulator.press_button("START")
-    emulator.press_button("A")
-    emulator.press_button("A")
-    emulator.press_button("A")
-    emulator.press_button("A")
-    emulator.press_button("A")
-    emulator.press_button("A")
+    buttons_to_press = ["POWER", "A", "START", "A", "A", "A", "A", "A", "A"]
+    for button in buttons_to_press:
+        emulator.press_button(button)
 
 def get_game_state(emulator: Emulator) -> np.ndarray:
     state = emulator.get_screen()
