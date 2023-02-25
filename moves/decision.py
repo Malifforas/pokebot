@@ -90,3 +90,86 @@ def perform_action(emulator: Emulator, action: str) -> None:
         pass
     except EmulatorConnectionError:
         raise
+def get_possible_moves(emulator: Emulator) -> List[str]:
+    """
+    Returns a list of valid moves that the agent can take from its current state.
+
+    Args:
+        emulator (Emulator): The Emulator object.
+
+    Returns:
+        List[str]: A list of valid moves that the agent can take.
+    """
+    moves = []
+    for move in get_action_space():
+        try:
+            emulator.press_button(move)
+            emulator.release_button(move)
+            moves.append(move)
+        except EmulatorInputError:
+            pass
+    return moves
+def get_q_value(q_table: dict, state: np.ndarray, action: str) -> float:
+    """
+    Returns the Q-value for a given state-action pair.
+
+    Args:
+        q_table (dict): The Q-table.
+        state (np.ndarray): The game state.
+        action (str): The action taken by the agent.
+
+    Returns:
+        float: The Q-value for the state-action pair.
+    """
+    state_key = str(state)
+    if state_key not in q_table:
+        q_table[state_key] = {a: 0.0 for a in get_action_space()}
+    return q_table[state_key][action]
+def update_q_table(q_table: dict, state: np.ndarray, action: str, reward: float, next_state: np.ndarray, discount_factor: float, learning_rate: float) -> None:
+    """
+    Updates the Q-value for a given state-action pair based on the observed reward and the expected future reward.
+
+    Args:
+        q_table (dict): The Q-table.
+        state (np.ndarray): The game state.
+        action (str): The action taken by the agent.
+        reward (float): The observed reward.
+        next_state (np.ndarray): The game state after the action was taken.
+        discount_factor (float): The discount factor for future rewards.
+        learning_rate (float): The learning rate for updating Q-values.
+    """
+    state_key = str(state)
+    if state_key not in q_table:
+        q_table[state_key] = {a: 0.0 for a in get_action_space()}
+    next_q = max([get_q_value(q_table, next_state, a) for a in get_possible_moves(NUZLOCKE.emulator)])
+    q_table[state_key][action] += learning_rate * (reward + discount_factor * next_q - q_table[state_key][action])
+
+    def decision(q_table: dict, state: np.ndarray, epsilon: float, discount_factor: float, learning_rate: float) -> str:
+        """
+        Uses the Q-table to decide on an action to take in the current game state.
+
+        Args:
+            q_table (dict): A dictionary representing the Q-table.
+            state (np.ndarray): The current game state.
+            epsilon (float): The probability of choosing a random action.
+            discount_factor (float): The discount factor for future rewards.
+            learning_rate (float): The learning rate for updating the Q-table.
+
+        Returns:
+            str: The action to take.
+        """
+        action_space = get_action_space()
+
+        # Choose a random action with probability epsilon
+        if np.random.uniform() < epsilon:
+            action = np.random.choice(action_space)
+        # Otherwise, choose the action with the highest Q-value for the current state
+        else:
+            state_key = str(state)
+            q_values = q_table[state_key]
+            max_q_value = max(q_values)
+            max_q_indices = [i for i, q_value in enumerate(q_values) if q_value == max_q_value]
+            max_q_index = np.random.choice(max_q_indices)
+            action = action_space[max_q_index]
+
+        return action
