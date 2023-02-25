@@ -1,23 +1,43 @@
-import cv2
 import numpy as np
+from .emulator import Emulator
 
+def load_rom(emulator: Emulator, rom_path: str) -> None:
+    with open(rom_path, "rb") as f:
+        rom = f.read()
+    emulator.load_rom(rom)
 
-def preprocess(image):
-    # Convert the image to grayscale
-    grayscale = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+def reset_emulator(emulator: Emulator) -> None:
+    emulator.press_button("POWER")
+    emulator.press_button("A")
+    emulator.press_button("START")
+    emulator.press_button("A")
+    emulator.press_button("A")
+    emulator.press_button("A")
+    emulator.press_button("A")
+    emulator.press_button("A")
+    emulator.press_button("A")
 
-    # Apply a Gaussian blur to the image
-    blurred = cv2.GaussianBlur(grayscale, (5, 5), 0)
+def get_game_state(emulator: Emulator) -> np.ndarray:
+    state = emulator.get_screen()
+    state = np.array(state)
+    state = np.transpose(state, (1, 0, 2))
+    state = state / 255.0
+    return state
 
-    # Apply binary thresholding to the image
-    _, thresholded = cv2.threshold(blurred, 160, 255, cv2.THRESH_BINARY)
+def get_action_space() -> list:
+    return ["UP", "DOWN", "LEFT", "RIGHT", "A", "B", "START", "SELECT"]
 
-    return thresholded
+def get_reward(prev_state: np.ndarray, curr_state: np.ndarray, action: str) -> float:
+    prev_score = np.mean(prev_state)
+    curr_score = np.mean(curr_state)
+    if action in ["UP", "DOWN", "LEFT", "RIGHT"]:
+        reward = -0.01
+    elif action == "A":
+        reward = 1.0
+    else:
+        reward = 0.0
+    reward += curr_score - prev_score
+    return reward
 
-
-def compare_images(image1, image2):
-    # Compute the mean squared error (MSE) between the two images
-    mse = np.mean((image1 - image2) ** 2)
-
-    # If the MSE is less than 500, the images are considered to be the same
-    return mse < 500
+def perform_action(emulator: Emulator, action: str) -> None:
+    emulator.press_button(action)

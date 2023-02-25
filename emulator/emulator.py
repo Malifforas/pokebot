@@ -3,7 +3,7 @@ import time
 import pyautogui
 import numpy as np
 import cv2
-
+from .utils import load_rom, perform_action
 
 class Emulator:
     def __init__(self, emulator_path, rom_path):
@@ -85,3 +85,37 @@ def compare_images(image1, image2):
 
     # If the MSE is less than 500, the images are considered to be the same
     return mse < 500
+class Emulator:
+    def __init__(self, emulator_path, rom_path):
+        self.emulator_path = emulator_path
+        self.rom_path = rom_path
+        self.process = None
+        self.pipe = None
+
+    def start(self):
+        # Start emulator process and establish communication pipe
+        self.process, self.pipe = start_emulator(self.emulator_path, self.rom_path)
+
+    def stop(self):
+        # Terminate emulator process and close communication pipe
+        stop_emulator(self.process, self.pipe)
+
+    def send_command(self, command):
+        # Send command to emulator via communication pipe
+        send_command(self.pipe, command)
+
+    def get_state(self):
+        # Get game state from emulator
+        return get_game_state(self.pipe)
+
+    def perform_action(self, action):
+        # Perform action in emulator
+        perform_action(self.pipe, action)
+
+    def reset(self):
+        # Reset emulator to starting state
+        reset_emulator(self.pipe)
+
+    def load_rom(self):
+        # Load ROM into emulator
+        load_rom(self.pipe, self.rom_path)
