@@ -2,8 +2,7 @@ from subprocess import Popen, PIPE, TimeoutExpired
 from threading import Thread, Event
 from queue import Queue
 import numpy as np
-from .utils import Util
-from .utils import get_screen_dimensions, crop_screen
+from .utils import Util, get_screen_dimensions, crop_screen
 
 
 class EmulatorConnectionError(Exception):
@@ -95,20 +94,10 @@ class Emulator:
             output_data = self.output_queue.get()
             return output_data
         return None
-    def get_output(self):
-        if not self.process or self.process.poll() is not None:
-            raise EmulatorConnectionError("Emulator process not running.")
-        if not self.output_queue.empty():
-            output_data = self.output_queue.get()
-            return output_data
-        return None
 
     def get_screen(self):
         screen = Util.numpy_array_to_image(crop_screen(self._get_raw_screen()))
         return screen
-
-    def get_screen_dimensions(self):
-        return get_screen_dimensions()
 
     def _get_raw_screen(self):
         return Util.base64_to_numpy_array(self.get_output())
@@ -117,12 +106,3 @@ class Emulator:
         status_data = self.get_output()
         if not status_data:
             return None
-        status = {}
-        for line in status_data.split(b';'):
-            if b':' in line:
-                key, value = line.split(b':')
-                status[key.strip().decode()] = value.strip().decode()
-        return status
-
-class EmulatorConnectionError(Exception):
-    pass
