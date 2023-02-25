@@ -26,9 +26,9 @@ def get_reward(action, prev_state, curr_state):
     Calculates the reward for taking a particular action.
 
     Args:
-        action (int): The action taken by the agent.
-        prev_state (GameState): The game state before the action was taken.
-        curr_state (GameState): The game state after the action was taken.
+        action (str): The action taken by the agent.
+        prev_state (np.ndarray): The game state before the action was taken.
+        curr_state (np.ndarray): The game state after the action was taken.
 
     Returns:
         float: The reward for taking the action.
