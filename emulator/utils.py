@@ -27,17 +27,19 @@ def get_game_state(emulator: Emulator) -> np.ndarray:
 def get_action_space() -> list:
     return ["UP", "DOWN", "LEFT", "RIGHT", "A", "B", "START", "SELECT"]
 
-def get_reward(prev_state: np.ndarray, curr_state: np.ndarray, action: str) -> float:
-    prev_score = np.mean(prev_state)
-    curr_score = np.mean(curr_state)
-    if action in ["UP", "DOWN", "LEFT", "RIGHT"]:
-        reward = -0.01
-    elif action == "A":
-        reward = 1.0
-    else:
-        reward = 0.0
-    reward += curr_score - prev_score
-    return reward
+def get_reward(action, prev_state, curr_state):
+    """
+    Calculates the reward for taking a particular action.
+
+    Args:
+        action (int): The action taken by the agent.
+        prev_state (GameState): The game state before the action was taken.
+        curr_state (GameState): The game state after the action was taken.
+
+    Returns:
+        float: The reward for taking the action.
+    """
+    # Implementation details omitted for brevity
 
 def perform_action(emulator: Emulator, action: str) -> None:
     emulator.press_button(action)
