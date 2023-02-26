@@ -1,6 +1,8 @@
 import numpy as np
 from PIL import Image
-from .emulator import Emulator
+
+from emulator import Emulator
+
 
 class Util:
     @staticmethod

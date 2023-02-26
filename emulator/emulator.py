@@ -2,8 +2,7 @@ from subprocess import Popen, PIPE, TimeoutExpired
 from threading import Thread, Event
 from queue import Queue
 import numpy as np
-from .utils import Util, get_screen_dimensions, crop_screen
-
+from utils import *
 
 class EmulatorConnectionError(Exception):
     pass
