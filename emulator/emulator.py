@@ -1,9 +1,9 @@
-from subprocess import Popen, PIPE, TimeoutExpired
-from threading import Thread, Event
 from queue import Queue
-import numpy as np
-
+from subprocess import Popen, PIPE
+from threading import Thread, Event
+from utils import crop_screen
 from utils import *
+
 
 class EmulatorConnectionError(Exception):
     pass
