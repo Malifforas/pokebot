@@ -1,7 +1,8 @@
 import numpy as np
 from PIL import Image
 from .emulator import Emulator
-
+from poke_env.player_configuration import PlayerConfiguration
+from poke_env.server_configuration import ServerConfiguration
 
 class Util:
     @staticmethod
