@@ -1,6 +1,8 @@
 from .move import Move
 from .game_state import GameState
 import poke_env
+from enum import Enum
+from state import State, PlayerRole
 class Action:
     def __init__(self):
         pass
