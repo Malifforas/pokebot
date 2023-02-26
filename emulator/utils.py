@@ -55,15 +55,16 @@ def get_reward(action, prev_state, curr_state):
 def perform_action(emulator: Emulator, action: str) -> None:
     emulator.press_button(action)
 
-    def crop_screen(screen):
-        # Get the dimensions of the screen
-        screen_width, screen_height = screen.shape[1], screen.shape[0]
 
-        # Crop the center 256x256 portion of the screen
-        crop_left = (screen_width - 256) // 2
-        crop_right = crop_left + 256
-        crop_top = (screen_height - 256) // 2
-        crop_bottom = crop_top + 256
-        cropped_screen = screen[crop_top:crop_bottom, crop_left:crop_right, :]
+def crop_screen(screen):
+    # Get the dimensions of the screen
+    screen_width, screen_height = Util.get_screen_dimensions(screen)
 
-        return cropped_screen
+    # Crop the center 256x256 portion of the screen
+    crop_left = (screen_width - 256) // 2
+    crop_right = crop_left + 256
+    crop_top = (screen_height - 256) // 2
+    crop_bottom = crop_top + 256
+    cropped_screen = screen[crop_top:crop_bottom, crop_left:crop_right, :]
+
+    return cropped_screen

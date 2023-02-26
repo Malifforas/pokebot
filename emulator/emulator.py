@@ -73,7 +73,7 @@ class Emulator:
                 self.buffer = lines[-1]
                 for line in lines[:-1]:
                     if line.startswith(b'State:'):
-                        self.output_queue.put(line[6:])
+                        self.output_queue.put(line[6:].decode())
 
     def send_input(self, input_data):
         if not self.process or self.process.poll() is not None:
@@ -106,3 +106,4 @@ class Emulator:
         status_data = self.get_output()
         if not status_data:
             return None
+        return status_data
