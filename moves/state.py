@@ -1,4 +1,5 @@
 from enum import Enum
+import random
 
 class PlayerRole(Enum):
     ATTACKER = 1
