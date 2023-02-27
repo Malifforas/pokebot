@@ -1,6 +1,6 @@
 from .decision import *
 from .action import *
-
+from game_state import GameState
 def choose_best_move(game_state):
     """
     Chooses the best move to perform in the current game state.

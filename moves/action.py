@@ -1,3 +1,4 @@
+from pokebot.game_state import GameState
 from poke_env.environment.abstract_battle import AbstractBattle
 from poke_env.environment.move import Move
 from poke_env.environment.pokemon import Pokemon
