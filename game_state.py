@@ -1,8 +1,3 @@
-class GameState:
-    def __init__(self):
-        self.current_pokemon = None
-        self.opponent_pokemon = None
-        self.battle_over = False
 from typing import List, Dict, Any
 
 class Pokemon:
@@ -25,4 +20,3 @@ class GameState:
     def __init__(self, player_data: Dict[str, Any], opponent_data: Dict[str, Any]):
         self.player = Pokemon(player_data)
         self.opponent = Opponent(opponent_data)
-        

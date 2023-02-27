@@ -3,6 +3,7 @@ from .game_state import GameState
 import poke_env
 from enum import Enum
 from state import State, PlayerRole
+from game_state import GameState
 class Action:
     def __init__(self):
         pass
