@@ -4,7 +4,7 @@ import cv2
 import numpy as np
 from PIL import ImageGrab
 
-from .config import Config
+from config import Config
 
 class Screen:
     @staticmethod

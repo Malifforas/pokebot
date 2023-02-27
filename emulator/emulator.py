@@ -1,5 +1,6 @@
 import keyboard
 import time
+from config import Config
 
 # Key codes for the emulator's default keybinds
 BUTTON_MAPPING = {

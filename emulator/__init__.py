@@ -1,46 +1,45 @@
-from .emulator import Emulator
-from .utils import (
-    load_rom,
-    reset_emulator,
-    get_game_state,
-    get_action_space,
-    get_reward,
-    perform_action,
-)
+from config import Config
+from emulator import Emulator
+from game_state import GameState
+from button import Button
+from target import Target
+from typing import List, Callable
+import time
+
+# Global Variables
+SCREEN_REGION = (0, 0, 256, 192)
+RUN_BUTTON_REGION = (178, 168, 32, 24)
+BUTTON_THRESHOLD = 0.8
 
 
-class PokemonAI:
-    def __init__(self, rom_path, emulator_path):
-        self.rom_path = rom_path
-        self.emulator_path = emulator_path
-        self.emulator = None
+def wait_for(func: Callable[[], bool], timeout: int = 5000, interval: int = 100) -> bool:
+    """
+    Wait for function to return True for up to `timeout` milliseconds.
 
-    def start(self):
-        # Load ROM and start emulator
-        self.emulator = Emulator(self.emulator_path, self.rom_path)
-        load_rom(self.emulator, self.rom_path)
-        self.emulator.start()
+    :param func: A function that returns a boolean value.
+    :param timeout: Maximum time to wait in milliseconds.
+    :param interval: Polling interval in milliseconds.
+    :return: True if function returns True before timeout, False otherwise.
+    """
+    elapsed_time = 0
+    while elapsed_time < timeout:
+        if func():
+            return True
+        time.sleep(interval / 1000)
+        elapsed_time += interval
+    return False
 
-    def reset(self):
-        # Reset emulator to starting state
-        reset_emulator(self.emulator)
 
-    def get_state(self):
-        # Get game state from emulator
-        return get_game_state(self.emulator)
-
-    def get_action_space(self):
-        # Get list of possible actions for the AI to take
-        return get_action_space()
-
-    def get_reward(self, prev_state, curr_state, action):
-        # Get reward for the AI's action
-        return get_reward(prev_state, curr_state, action)
-
-    def perform_action(self, action):
-        # Perform action in emulator
-        perform_action(self.emulator, action)
-
-    def stop(self):
-        # Stop emulator
-        self.emulator.stop()
+__all__ = [
+    'Config',
+    'Emulator',
+    'GameState',
+    'Button',
+    'Target',
+    'List',
+    'Callable',
+    'wait_for',
+    'SCREEN_REGION',
+    'RUN_BUTTON_REGION',
+    'BUTTON_THRESHOLD'
+]
