@@ -1,9 +1,13 @@
-from typing import List
-import numpy as np
-from .util import get_screen_dimensions, crop_screen, check_for_shiny, get_text, get_npc_text, get_move_description
-from .emulator import Emulator, EmulatorConnectionError, EmulatorInputError, EmulatorStartupError
-from .nuzlocke import Nuzlocke
+from enum import Enum
+from typing import Optional
 
+from poke_env.environment.move import Move
+from poke_env.environment.pokemon import Pokemon
+from poke_env.environment.side_condition import SideCondition
+from poke_env.environment.status import Status
+from poke_env.environment.weather import Weather
+from poke_env.environment.field import Field
+from poke_env.environment.game_state import GameState
 # The global Nuzlocke object that will be used throughout the game
 NUZLOCKE = Nuzlocke()
 

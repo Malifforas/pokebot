@@ -1,9 +1,12 @@
-from .move import Move
-from .game_state import GameState
-import poke_env
-from enum import Enum
-from state import State, PlayerRole
-from game_state import GameState
+from poke_env.environment.abstract_battle import AbstractBattle
+from poke_env.environment.move import Move
+from poke_env.environment.pokemon import Pokemon
+from poke_env.environment.side_condition import SideCondition
+from poke_env.environment.status import Status
+from poke_env.environment.weather import Weather
+from poke_env.environment.field import Field
+from poke_env.environment.battle import Battle
+from poke_env.environment.game_state import GameState
 class Action:
     def __init__(self):
         pass
