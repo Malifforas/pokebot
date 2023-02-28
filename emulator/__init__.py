@@ -1,5 +1,5 @@
 from config import Config
-from emulator import Emulator
+from pokebot.emulator import Emulator
 from game_state import GameState
 from button import Button
 from target import Target
