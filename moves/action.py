@@ -1,16 +1,24 @@
-from pokebot.game_state import GameState
-from poke_env.environment.abstract_battle import AbstractBattle
-from poke_env.environment.move import Move
-from poke_env.environment.pokemon import Pokemon
-from poke_env.environment.side_condition import SideCondition
-from poke_env.environment.status import Status
-from poke_env.environment.weather import Weather
-from poke_env.environment.field import Field
-from poke_env.environment.battle import Battle
-from poke_env.environment.game_state import GameState
+import pyautogui
+import time
+from typing import List, Tuple
+from PIL import Image
+import numpy as np
+from typing import Tuple, Callable
+from screen import Screen
+from config import Config
+from emulator import wait_for, GameState, SCREEN_REGION, BUTTON_THRESHOLD, RUN_BUTTON_REGION
+import cv2
+import numpy as np
+from PIL import ImageGrab
+
+from emulator import Emulator
+from emulator import Config
+from emulator.game_state import GameState
 class Action:
+
     def __init__(self):
         pass
+
 
     def perform(self, game_state: GameState) -> bool:
         """
@@ -232,3 +240,78 @@ class UntilTimeoutAction(Action):
             elapsed_time = time.monotonic() - start_time
             if elapsed_time > self.timeout:
                 return False
+
+class Move:
+    def __init__(self, name: str, target: str) -> None:
+        self.name = name
+        self.target = target
+
+class Target:
+    SELF = 'self'
+    OPPONENT = 'opponent'
+
+class Button:
+    A = 'a'
+    B = 'b'
+    UP = 'up'
+    DOWN = 'down'
+    LEFT = 'left'
+    RIGHT = 'right'
+    START = 'start'
+    SELECT = 'select'
+
+class ScreenRegion:
+    def __init__(self, x: int, y: int, width: int, height: int) -> None:
+        self.x = x
+        self.y = y
+        self.width = width
+        self.height = height
+
+    def as_tuple(self) -> Tuple[int, int, int, int]:
+        return self.x, self.y, self.width, self.height
+
+class CallableAction:
+    def __init__(self, fn: Callable[..., bool], args: Tuple = (), kwargs: dict = {}) -> None:
+        self.fn = fn
+        self.args = args
+        self.kwargs = kwargs
+
+    def __call__(self, *args, **kwargs) -> bool:
+        return self.fn(*self.args, **self.kwargs)
+class Screen:
+    """
+    Class representing the screen of the emulator.
+    """
+
+    def __init__(self, region: Tuple[int, int, int, int]):
+        self.region = region
+
+    def capture(self) -> np.ndarray:
+        """
+        Capture the current screen region.
+
+        :return: A numpy array representing the screen image.
+        """
+        return np.array(ImageGrab.grab(bbox=self.region))
+
+    def capture_gray(self) -> np.ndarray:
+        """
+        Capture the current screen region in grayscale.
+
+        :return: A numpy array representing the grayscale screen image.
+        """
+        screen = self.capture()
+        gray = cv2.cvtColor(screen, cv2.COLOR_BGR2GRAY)
+        return gray
+
+
+class Move:
+    """
+    Class representing a move.
+    """
+
+    def __init__(self, name: str):
+        self.name = name
+
+    def __eq__(self, other: 'Move') -> bool:
+        return self.name.lower() == other.name.lower()

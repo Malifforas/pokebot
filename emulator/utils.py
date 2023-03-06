@@ -1,9 +1,7 @@
 import time
-
 import cv2
 import numpy as np
 from PIL import ImageGrab
-
 from config import Config
 
 class Screen:

@@ -1,8 +1,5 @@
 from config import Config
-from pokebot.emulator import Emulator
 from game_state import GameState
-from button import Button
-from target import Target
 from typing import List, Callable
 import time
 
@@ -32,10 +29,7 @@ def wait_for(func: Callable[[], bool], timeout: int = 5000, interval: int = 100)
 
 __all__ = [
     'Config',
-    'Emulator',
     'GameState',
-    'Button',
-    'Target',
     'List',
     'Callable',
     'wait_for',
