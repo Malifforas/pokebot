@@ -1,8 +1,60 @@
-import time
 import cv2
+import keyboard
 import numpy as np
 from PIL import ImageGrab
+import requests
+import json
+import time
 from config import Config
+
+# Duration of button presses
+BUTTON_PRESS_DURATION = 0.2
+
+# Mapping of button names to emulator key codes
+BUTTON_MAPPING = {
+    "up": "up_arrow",
+    "down": "down_arrow",
+    "left": "left_arrow",
+    "right": "right_arrow",
+    "a": "z",
+    "b": "x",
+    "x": "a",
+    "y": "s",
+    "l": "q",
+    "r": "w",
+    "start": "return",
+    "select": "backspace",
+}
+
+def press(button):
+    """
+    Press a button on the emulator.
+
+    :param button: The button to press.
+    """
+    keyboard.press(BUTTON_MAPPING[button])
+    time.sleep(BUTTON_PRESS_DURATION)
+    keyboard.release(BUTTON_MAPPING[button])
+    time.sleep(BUTTON_PRESS_DURATION)
+
+class PokeAPI:
+    BASE_URL = "https://pokeapi.co/api/v2"
+
+    @staticmethod
+    def get_pokemon(pokemon_name):
+        url = f"{PokeAPI.BASE_URL}/pokemon/{pokemon_name}"
+        response = requests.get(url)
+        if response.status_code == 200:
+            return json.loads(response.content.decode('utf-8'))
+        return None
+
+    @staticmethod
+    def get_move(move_name):
+        url = f"{PokeAPI.BASE_URL}/move/{move_name}"
+        response = requests.get(url)
+        if response.status_code == 200:
+            return json.loads(response.content.decode('utf-8'))
+        return None
 
 class Screen:
     @staticmethod
